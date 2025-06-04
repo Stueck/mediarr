@@ -3,7 +3,7 @@
 # ========== CONFIGURATION ==========
 # Set the base target directory
 #TARGET_PARENT_DIR="/path/to/target/folder"
-TARGET_PARENT_DIR="/mnt/nas/media/movies/hd_downloadtest/"
+TARGET_PARENT_DIR="/mnt/nas/media/movies/hd_originalnames/"
 
 # No hardlinks for extensions or files
 EXCLUDED_EXTENSIONS=("*.url" "*.html" "thumbs.db", "support.txt", "unterstuetzung.txt")

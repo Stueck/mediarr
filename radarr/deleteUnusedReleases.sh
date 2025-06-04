@@ -6,8 +6,8 @@ DRY_RUN=true
 
 # List of potential parent directories that may contain scene-named folders.
 TARGET_PARENT_DIRS=(
-  "/srv/mergerfs/Pool/server/media/movies/hd_downloadtest"
-  "/srv/mergerfs/Pool/server/media/movies/hd_original"
+  "/mnt/nas/data/media/movies/hd_originalnames"
+  "/mnt/nas/data/media/movies/4k_originalnames"
 )
 
 # --- FALLBACK SETTINGS (via INODE) ---
@@ -20,7 +20,7 @@ USE_INODE_FALLBACK=true
 
 # Path to the recycle bin where Radarr moves deleted files. (activate in radarr!)
 # Needed to locate the fallback file for inode lookup.
-RECYCLE_BIN_PATH="/srv/mergerfs/Pool/server/media/movies/recycle_bin"
+RECYCLE_BIN_PATH="/mnt/nas/data/media/movies/recycle_bin"
 
 # Enable deletion of the recycle bin folder containing the fallback file.
 # Only applicable if USE_INODE_FALLBACK=true.
