@@ -15,7 +15,7 @@ The scripts are organized into subfolders based on their purpose:
 ### 🔗 `sabnzbd/createHardlinksForDownloads.sh`
 
 Executed by SABnzbd after a download completes.
-It creates a **hardlink** copy of the files in a separate target directory while **preserving the original Scene name**.
+It creates a **hardlink** copy of the files in a separate target directory while **preserving the original Scene name**.  
 💡 This allows Radarr to move and rename files as needed without affecting the original data.
 
 ---
@@ -42,7 +42,7 @@ It then executes the real deletion logic using `deleteUnusedReleases.sh` on that
 
 ### 🧹 `radarr/deleteUnusedReleases.sh`
 
-Removes previously created **Scene release folders**.
+Removes previously created **Scene release folders**.  
 Configure in Radarr (**Settings > Connect > Custom Scripts**) when not using `execViaSsh.sh` instead.
 
 * **Standard mode:** Deletes the folder based on its name
@@ -51,14 +51,14 @@ Configure in Radarr (**Settings > Connect > Custom Scripts**) when not using `ex
 * Optionally deletes files from Radarr’s **Recycle Bin**
 * Supports **`DRY_RUN=true`** for safe testing
 
-📌 To enable fallback deletion, **make sure the Recycle Bin feature is enabled in Radarr** (`Settings → Media Management → Enable Recycle Bin`).
+📌 To enable fallback deletion, **make sure the Recycle Bin feature is enabled in Radarr** (`Settings → Media Management → Enable Recycle Bin`).  
 📌 See script comments for setup and configuration.
 
 ---
 
 ### 🧪 `radarr/radarrLogCustomScriptVariables.sh`
 
-Prints all environment variables passed by Radarr during execution.
+Prints all environment variables passed by Radarr during execution.  
 Useful for debugging and understanding what data Radarr provides.
 
 ---
@@ -67,7 +67,7 @@ Useful for debugging and understanding what data Radarr provides.
 
 ### 🔍 `helper/findOddFiles.sh`
 
-Scans a directory for **unexpected or unwanted files**, i.e., those that do not match common media extensions like `.mkv`, `.nfo`, `.srt`, etc.
+Scans a directory for **unexpected or unwanted files**, i.e., those that do not match common media extensions like `.mkv`, `.nfo`, `.srt`, etc.  
 Files can either be deleted interactively or immediately.
 
 * **Usage:**
@@ -80,7 +80,7 @@ Files can either be deleted interactively or immediately.
 
 ### 📊 `helper/hardlinkCounter.sh`
 
-Counts how many **hardlinks** exist for each `.mkv` file.
+Counts how many **hardlinks** exist for each `.mkv` file.  
 Helpful to identify orphaned or duplicate media files.
 
 * **Usage:**
