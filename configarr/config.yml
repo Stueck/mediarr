@@ -12,7 +12,7 @@
 #localConfigTemplatesPath: /app/templates
 
 # true or false
-sonarrEnabled: false
+sonarrEnabled: true
 radarrEnabled: true
 whisparrEnabled: false
 readarrEnabled: false
@@ -131,7 +131,7 @@ customFormatDefinitions:
 
 radarr:
   hd-bluray-web-ger:
-    base_url: http://192.168.2.170:7878/
+    base_url: http://10.10.10.12:7878/
     api_key: !secret RADARR_API_KEY # Reference to API key in secrets.yml
     # media_management:
     #   id: 1
@@ -170,14 +170,16 @@ radarr:
     #   movieFolderFormat: "{Movie Title:DE} ({Release Year}) {tmdb-{TmdbId}}"
 
 
+    renameQualityProfiles:
+      - from: "HD Bluray + WEB (GER)"
+        to: HD Highest
+        
     cloneQualityProfiles:
-      - from: "HD Bluray + WEB (GER)"
-        to: "HD Highest"
-      - from: "HD Bluray + WEB (GER)"
+      - from: "HD Highest"
         to: "HD Standard"
-      - from: "HD Bluray + WEB (GER)"
+      - from: "HD Highest"
         to: "HD Small"
-      - from: "HD Bluray + WEB (GER)"
+      - from: "HD Highest"
         to: "HD FuN"
 
     include:
@@ -233,7 +235,7 @@ radarr:
           - name: HD Standard
             score: 300
           - name: HD Small
-            score: 1500
+            score: 1650
           - name: HD FuN
             score: 2000
 ### reduce 720p score
@@ -257,9 +259,9 @@ radarr:
         assign_scores_to:
           - name: HD Standard
           - name: HD Small
-            score: 36650
+            score: 35000
           - name: HD FuN
-            score: 39000
+            score: 37000
 ### give smaller files a bonus 10gb
       - trash_ids:
           - max-10gb-bonus
@@ -302,7 +304,7 @@ radarr:
           - name: HD Small
             score: 1600
           - name: HD FuN
-            score: 1000
+            score: 1600
  ### reduce HQ Release Groups
       - trash_ids:
           - ed27ebfef2f323e964fb1f61391bcb35 # HD Bluray Tier 01
@@ -317,7 +319,160 @@ radarr:
           - name: HD FuN
             score: 0
 
+  4k-ger:
+    base_url: http://10.10.10.17:7878/
+    api_key: !secret RADARR4k_API_KEY # Reference to API key in secrets.yml
+    media_management:
+      id: 1
+      autoUnmonitorPreviouslyDownloadedMovies: false
+      recycleBinCleanupDays: 3
+      downloadPropersAndRepacks: doNotPrefer
+      createEmptyMovieFolders: false
+      deleteEmptyFolders: false
+      fileDate: "none"
+      rescanAfterRefresh: always
+      autoRenameFolders: true
+      pathsDefaultStatic: true
+      setPermissionsLinux: false
+      chmodFolder: ""
+      chownGroup: ""
+      skipFreeSpaceCheckWhenImporting: false
+      minimumFreeSpaceWhenImporting: 50000
+      copyUsingHardlinks: true
+      useScriptImport: false
+      importExtraFiles: true
+      extraFileExtensions: .srt, .sub, .idx, .vob, .nfo, .stl, .sup, .vtt, .info
+      enableMediaInfo: true
+    media_naming_api:
+      id: 1
+      renameMovies: true
+      replaceIllegalCharacters: true
+      colonReplacementFormat: smart
+      standardMovieFormat: "{Movie Title:DE}{(Release Year)} [tmdb-{TmdbId}] -
+        {Edition Tags }{[Custom Formats]}{[Quality Full]}{[MediaInfo 3D]}{[MediaInfo
+        VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo
+        AudioChannels]}{[Mediainfo VideoCodec]}{-Release Group}"
+      movieFolderFormat: "{Movie Title:DE} ({Release Year}) {tmdb-{TmdbId}}"
 
+
+    renameQualityProfiles:
+      - from: "Remux + WEB 2160p (GER)"
+        to: UHD 4k
+
+    delete_unmanaged_custom_formats:
+      enabled: true
+
+    include:
+#      - template: radarr-quality-definition-movie
+      - template: radarr-custom-formats-uhd-remux-web-german
+      - template: radarr-quality-profile-uhd-remux-web-german
+
+    quality_profiles:
+      - name: UHD 4k
+        min_format_score: 10000 # Uncomment this line to skip English Releases
+        qualities:
+          - name: Merged QPs
+            qualities:
+              - Bluray-2160p # Bluray is good enough - save space if this is available
+              - Remux-2160p
+              - WEBDL-2160p
+              - WEBRip-2160p
+
+    custom_formats:
+# Add Bluray for Remux template    
+      - trash_ids:
+        # German HQ Release Groups - adjust scores to be compareable with remuxes
+        - 54795711b78ea87e56127928c423689b # German Bluray Tier 01
+        assign_scores_to:
+          - name: UHD 4k
+            score: 4000
+      - trash_ids:
+        - 1bfc773c53283d47c68e535811da30b7 # German Bluray Tier 02
+        assign_scores_to:
+          - name: UHD 4k
+            score: 3900
+      - trash_ids:
+        - aee01d40cd1bf4bcded81ee62f0f3659 # German Bluray Tier 03
+        assign_scores_to:
+          - name: UHD 4k
+            score: 3600
+      - trash_ids:
+        # HQ Release Groups
+        - 4d74ac4c4db0b64bff6ce0cffef99bf0 # UHD Bluray Tier 01
+        - a58f517a70193f8e578056642178419d # UHD Bluray Tier 02
+        - e71939fae578037e7aed3ee219bbe7c1 # UHD Bluray Tier 03
+        assign_scores_to:
+          - name: UHD 4k
+
+### Audio
+      - trash_ids:
+# Uncomment the next section to enable Advanced Audio Formats
+#          - 496f355514737f7d83bf7aa4d24f8169 # TrueHD Atmos
+#          - 2f22d89048b01681dde8afe203bf2e95 # DTS X
+#          - 417804f7f2c4308c1f4c5d380d4c4475 # ATMOS (undefined)
+#          - 1af239278386be2919e1bcee0bde047e # DD+ ATMOS
+#          - 3cafb66171b47f226146a0770576870f # TrueHD
+#          - dcf3ec6938fa32445f590a4da84256cd # DTS-HD MA
+#          - a570d4a0e56a2874b64e5bfa55202a1b # FLAC
+#          - e7c2fcae07cbada050a0af3357491d7b # PCM
+#          - 8e109e50e0a0b83a5098b056e13bf6db # DTS-HD HRA
+#          - 185f1dd7264c4562b9022d963ac37424 # DD+
+#          - f9f847ac70a0af62ea4a08280b859636 # DTS-ES
+#          - 1c1a4c5e823891c75bc50380a6866f73 # DTS
+#          - 240770601cc226190c367ef59aba7463 # AAC
+#          - c2998bd0d90ed5621d8df281e839436e # DD
+        assign_scores_to:
+          - name: UHD 4k
+
+### Movie Versions
+      - trash_ids:
+# Uncomment any of the following lines to prefer these movie versions
+#          - 0f12c086e289cf966fa5948eac571f44 # Hybrid
+         - 570bc9ebecd92723d2d21500f4be314c # Remaster
+         - eca37840c13c6ef2dd0262b141a5482f # 4K Remaster
+#          - e0c07d59beb37348e975a930d5e50319 # Criterion Collection
+#          - 9d27d9d2181838f76dee150882bdc58c # Masters of Cinema
+#          - db9b4c4b53d312a3ca5f1378f6440fc9 # Vinegar Syndrome
+         - 957d0f44b592285f26449575e8b1167e # Special Edition
+         - eecf3a857724171f968a66cb5719e152 # IMAX
+         - 9f6cbff8cfe4ebbc1bde14c7b7bec0de # IMAX Enhanced
+        assign_scores_to:
+          - name: UHD 4k
+
+### Optional
+      - trash_ids:
+         - b6832f586342ef70d9c128d40c07b872 # Bad Dual Groups
+         - ae9b7c9ebde1f3bd336a8cbd1ec4c5e5 # No-RlsGroup
+#          - f537cf427b64c38c8e36298f657e4828 # Scene
+        assign_scores_to:
+          - name: UHD 4k
+
+### HDR / DV
+      - trash_ids:
+# Comment out the next line if you and all of your users' setups are fully DV compatible
+          - 923b6abef9b17f937fab56cfcf89e1f1 # DV (WEBDL)
+# HDR10+ Boost - Uncomment the next two lines if any of your devices DO support HDR10+
+          - b17886cb4158d9fea189859409975758 # HDR10Plus Boost
+          - 55a5b50cb416dea5a50c4955896217ab # DV HDR10+ Boost
+        assign_scores_to:
+          - name: UHD 4k
+
+### Optional SDR
+# Only ever use ONE of the following custom formats:
+# SDR - block ALL SDR releases
+# SDR (no WEBDL) - block UHD/4k Remux and Bluray encode SDR releases, but allow SDR WEB
+      - trash_ids:
+#          - 9c38ebb7384dada637be8899efa68e6f # SDR
+          - 25c12f78430a3a23413652cbd1d48d77 # SDR (no WEBDL)
+        assign_scores_to:
+          - name: UHD 4k
+
+### Generated Dynamic HDR
+      - trash_ids:
+#          - e6886871085226c3da1830830146846c # Uncomment this line to block Generated Dynamic HDR
+        assign_scores_to:
+          - name: UHD 4k
+            score: -35000
 
 
 ### x265 - IMPORTANT: Only use on of the options below.
@@ -345,3 +500,93 @@ radarr:
 #        assign_scores_to:
 #          - name: HD Highest
 #            score: 0
+
+sonarr:
+  hd-bluray-web-ger:
+    base_url: http://10.10.10.11:8989/
+    api_key: !secret SONARR_API_KEY # Reference to API key in secrets.yml
+
+    cloneQualityProfiles:
+      - from: "HD Bluray + WEB (GER)"
+        to: "HD Highest"
+      - from: "HD Bluray + WEB (GER)"
+        to: "HD Standard"
+      - from: "HD Bluray + WEB (GER)"
+        to: "HD Small"
+      - from: "HD Bluray + WEB (GER)"
+        to: "HD FuN"
+
+    include:
+#      - template: sonarr-quality-definition-series
+      - template: sonarr-v4-custom-formats-hd-bluray-web-german
+      - template: sonarr-v4-quality-profile-hd-bluray-web-german
+
+    quality_profiles:
+      - name: HD Highest
+        min_format_score: 9000 # Uncomment this line to skip English Releases
+      - name: HD Standard
+        min_format_score: 9000 # Uncomment this line to skip English Releases
+      - name: HD Small
+        min_format_score: 7000 # Uncomment this line to skip English Releases
+      - name: HD FuN
+        min_format_score: 7000 # Uncomment this line to skip English Releases
+
+    custom_formats:
+### Optional
+      - trash_ids:
+          - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
+          - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
+#          - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
+#          - 06d66ab109d4d2eddb2794d21526d140 # Retags
+          - 1b3994c551cbb92a2c781af061f4ab44 # Scene
+        assign_scores_to:
+          - name: HD Highest
+          - name: HD Standard
+          - name: HD Small
+          - name: HD FuN
+
+### Prefer good x265 releases e.g. VECTOR 
+      - trash_ids:
+         - 47435ece6b99a0b477caf360e79ba0bb # Prefer good x265 releases e.g. VECTOR
+        assign_scores_to:
+          - name: HD Standard
+            score: 300
+          - name: HD Small
+            score: 1650
+          - name: HD FuN
+            score: 2000
+### allow / prefer FuN
+      - trash_ids:
+          - custom-allow-fun-microsized
+        assign_scores_to:
+          - name: HD Standard
+          - name: HD Small
+            score: 35000
+          - name: HD FuN
+            score: 37000
+### reduce and "flatten" German HQ Release Groups - all good enough
+      - trash_ids:
+          - 7940b2fb0278f27cf4f70187f2be95d6 # German Bluray Tier 01
+          - 83b336a90d90d6b35ca673b007f80661 # German Bluray Tier 02
+          - d8f8e1539827967e0e564833e6c08d33 # German Bluray Tier 03
+          - 68be37323132b35cf333c81a2ac8fc16 # German Web Tier 01
+          - f51b96a50b0e6196cb69724b7833d837 # German Web Tier 02
+          - bda67c2c0aae257308a4723d92475b86 # German Web Tier 03
+          - c2eec878fa1989599c226ce4c287d6a7 # German Scene
+        assign_scores_to:
+          - name: HD Small
+            score: 1600
+          - name: HD FuN
+            score: 1600
+ ### reduce HQ Release Groups
+      - trash_ids:
+          - d6819cba26b1a6508138d25fb5e32293 # HD Bluray Tier 01
+          - c2216b7b8aa545dc1ce8388c618f8d57 # HD Bluray Tier 02
+          - e6258996055b9fbab7e9cb2f75819294 # WEB Tier 01
+          - 58790d4e2fdcd9733aa7ae68ba2bb503 # WEB Tier 02
+          - d84935abd3f8556dcd51d4f27e22d0a6 # WEB Tier 03
+        assign_scores_to:
+          - name: HD Small
+            score: 600
+          - name: HD FuN
+            score: 0
