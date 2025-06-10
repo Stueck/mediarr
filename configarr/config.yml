@@ -91,6 +91,7 @@ customFormatDefinitions:
          min: 0
          max: 12
 
+
   - trash_id: above-20gb
     trash_scores:
       default: -3000
@@ -105,6 +106,48 @@ customFormatDefinitions:
        fields:
          min: 0
          max: 20
+
+  - trash_id: above-40gb-remux
+    trash_scores:
+      default: -3000
+    trash_description: "Max. 40GB"
+    name: "Max. 40GB"
+    includeCustomFormatWhenRenaming: false
+    specifications:
+     - name: max40GB
+       implementation: SizeSpecification
+       negate: true
+       required: true
+       fields:
+         min: 0
+         max: 40
+     - name: Remux
+       implementation: QualityModifierSpecification
+       negate: false
+       required: true
+       fields:
+        value: 5
+
+  - trash_id: under-7gb-uhd
+    trash_scores:
+      default: -3000
+    trash_description: "Min. 7GB UHD"
+    name: "min. 7GB UHD"
+    includeCustomFormatWhenRenaming: false
+    specifications:
+     - name: min7gb
+       implementation: SizeSpecification
+       negate: false
+       required: true
+       fields:
+         min: 0
+         max: 7
+     - name: 2160p
+       implementation: ResolutionSpecification
+       negate: false
+       required: true
+       fields:
+         value: 2160
 
   - trash_id: max8gb-for-older-movies-1990
     trash_scores:
@@ -206,6 +249,7 @@ radarr:
 #          - 5c44f52a8714fdd79bb4d98e2673be1f # Retags
 #          - f537cf427b64c38c8e36298f657e4828 # Scene
           - 182fa1c42a2468f8488e6dcf75a81b81 # Internal +10
+          - 390455c22a9cac81a738f6cbad705c3c # no x266 except remux
         assign_scores_to:
           - name: HD Highest
           - name: HD Standard
@@ -356,7 +400,7 @@ radarr:
 
 
     renameQualityProfiles:
-      - from: "Remux + WEB 2160p (GER)"
+      - from: "UHD Bluray + WEB (GER)"
         to: UHD 4k
 
     delete_unmanaged_custom_formats:
@@ -364,8 +408,8 @@ radarr:
 
     include:
 #      - template: radarr-quality-definition-movie
-      - template: radarr-custom-formats-uhd-remux-web-german
-      - template: radarr-quality-profile-uhd-remux-web-german
+      - template: radarr-custom-formats-uhd-bluray-web-german
+      - template: radarr-quality-profile-uhd-bluray-web-german
 
     quality_profiles:
       - name: UHD 4k
@@ -381,28 +425,24 @@ radarr:
     custom_formats:
 # Add Bluray for Remux template    
       - trash_ids:
-        # German HQ Release Groups - adjust scores to be compareable with remuxes
-        - 54795711b78ea87e56127928c423689b # German Bluray Tier 01
+        # German HQ Release Groups - adjust scores to be compareable with bluray encodes
+        - 8608a2ed20c636b8a62de108e9147713 # German Remux Tier 01
         assign_scores_to:
           - name: UHD 4k
-            score: 4000
+            score: 1600
       - trash_ids:
-        - 1bfc773c53283d47c68e535811da30b7 # German Bluray Tier 02
+        - f9cf598d55ce532d63596b060a6db9ee  # German Remux Tier 02
         assign_scores_to:
           - name: UHD 4k
-            score: 3900
-      - trash_ids:
-        - aee01d40cd1bf4bcded81ee62f0f3659 # German Bluray Tier 03
-        assign_scores_to:
-          - name: UHD 4k
-            score: 3600
+            score: 1500
       - trash_ids:
         # HQ Release Groups
-        - 4d74ac4c4db0b64bff6ce0cffef99bf0 # UHD Bluray Tier 01
-        - a58f517a70193f8e578056642178419d # UHD Bluray Tier 02
-        - e71939fae578037e7aed3ee219bbe7c1 # UHD Bluray Tier 03
+        - 3a3ff47579026e76d6504ebea39390de # Remux Tier 01
+        - 9f98181fe5a3fbeb0cc29340da2a468a # Remux Tier 02
+        - 8baaf0b3142bf4d94c42a724f034e27a # Remux Tier 03
         assign_scores_to:
           - name: UHD 4k
+            score: 1400
 
 ### Audio
       - trash_ids:
@@ -444,8 +484,17 @@ radarr:
          - b6832f586342ef70d9c128d40c07b872 # Bad Dual Groups
          - ae9b7c9ebde1f3bd336a8cbd1ec4c5e5 # No-RlsGroup
 #          - f537cf427b64c38c8e36298f657e4828 # Scene
+         - 390455c22a9cac81a738f6cbad705c3c # no x266 except remux
         assign_scores_to:
           - name: UHD 4k
+
+### Size Limiter
+      - trash_ids:
+         - above-40gb-remux
+#         - under-7gb-uhd
+        assign_scores_to:
+          - name: UHD 4k
+          
 
 ### HDR / DV
       - trash_ids:
@@ -539,6 +588,7 @@ sonarr:
 #          - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
 #          - 06d66ab109d4d2eddb2794d21526d140 # Retags
           - 1b3994c551cbb92a2c781af061f4ab44 # Scene
+          - 390455c22a9cac81a738f6cbad705c3c # no x266 except remux
         assign_scores_to:
           - name: HD Highest
           - name: HD Standard
