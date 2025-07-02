@@ -255,7 +255,7 @@ Wird gespeichert unter:
 `/etc/iptables/rules.v6`  
 
 **ACHTUNG Crowdsec**:
-Das wird sich später etwas beißen. Man sollte mit `sudo netfilter-persistent save` am besten nur die eigenen Regeln speichern. Bitte beim Einrichten später von [Crowdsec](#eigene-iptables-sauber-wiederherstellen-reboot) beachten.
+Das wird sich später etwas beißen. Man sollte mit `sudo netfilter-persistent save` am besten nur die eigenen Regeln speichern. Bitte beim Einrichten später von [Crowdsec](#-eigene-iptables-wiederherstellen-reboot-) beachten.
 
 ```bash
 # Alte Regeln löschen?
