@@ -1,4 +1,3 @@
-- [📘 Gesamtdokumentation: Sicherer VPS-Reverse-Proxy mit Fail2Ban und Cloudflare](#-gesamtdokumentation-sicherer-vps-reverse-proxy-mit-fail2ban-und-cloudflare)
 - [Fail2Ban](#fail2ban)
   - [Grundkonfiguration](#grundkonfiguration)
   - [Jellyseerr (mit Cloudflare API)](#jellyseerr-mit-cloudflare-api)
