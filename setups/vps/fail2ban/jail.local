@@ -1,0 +1,17 @@
+[DEFAULT]
+bantime = 4h
+findtime = 40m
+maxretry = 5
+backend = auto
+
+[sshd]
+enabled = true
+port = ssh
+#logpath = /var/log/auth.log
+
+[nginx-botsearch]
+enabled  = true
+port     = http,https
+filter   = nginx-botsearch
+logpath  = /var/log/nginx/access.log
+maxretry = 2

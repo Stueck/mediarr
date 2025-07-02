@@ -1,0 +1,17 @@
+[jellyseerr]
+cfzone = meineZoneIddbf806724ced653242751
+cftoken = meinCloudFlareTokenW4oeccGiVLhwSWQffZ901
+
+enabled = true
+port = http,https
+filter = jellyseerr
+backend = auto
+logpath = /var/log/nginx/jellyseer_access.log
+# overwirte "notes" because the space in notes in cloudflare-token.conf prevents unblock ("notes = Fail2Ban <name>")
+# fixed with https://github.com/fail2ban/fail2ban/issues/3479 but not in debian 12 yet
+action = cloudflare-token[cftoken="%(cftoken)s", cfzone="%(cfzone)s", notes="Fail2Ban_jellyseerr"]
+         iptables-multiport
+maxretry = 3
+bantime = 1d
+findtime = 30m
+
