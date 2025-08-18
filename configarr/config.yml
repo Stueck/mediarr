@@ -212,6 +212,8 @@ radarr:
     #     AudioChannels]}{[Mediainfo VideoCodec]}{-Release Group}
     #   movieFolderFormat: "{Movie Title:DE} ({Release Year}) {tmdb-{TmdbId}}"
 
+    delete_unmanaged_custom_formats:
+      enabled: true
 
     renameQualityProfiles:
       - from: "HD Bluray + WEB (GER)"
@@ -282,14 +284,14 @@ radarr:
             score: 1650
           - name: HD FuN
             score: 2000
-### reduce 720p score
-      - trash_ids:
-          - b2be17d608fc88818940cd1833b0b24c
-        assign_scores_to:
-          - name: HD Standard
-          - name: HD Small
-          - name: HD FuN
-            score: -1105
+# ### reduce 720p score
+#       - trash_ids:
+#           - b2be17d608fc88818940cd1833b0b24c
+#         assign_scores_to:
+#           - name: HD Standard
+#           - name: HD Small
+#           - name: HD FuN
+#             score: -1105
 ### reduce old movie score
       - trash_ids:
          - max8gb-for-older-movies-1990
@@ -306,34 +308,37 @@ radarr:
             score: 35000
           - name: HD FuN
             score: 37000
-### give smaller files a bonus 10gb
-      - trash_ids:
-          - max-10gb-bonus
-        assign_scores_to:
-          - name: HD Standard
-      - trash_ids:
-          - max-10gb-bonus
-        assign_scores_to:
-          - name: HD Standard
-          - name: HD Small
-            score: 900
-### give smaller files a bonus 7gb
-      - trash_ids:
-          - max-7gb-bonus
-        assign_scores_to:
-          - name: HD Standard
-      - trash_ids:
-          - max-7gb-bonus
-        assign_scores_to:
-          - name: HD Standard
-          - name: HD Small
-            score: 1000
+# ### give smaller files a bonus 10gb
+#       - trash_ids:
+#           - max-10gb-bonus
+#         assign_scores_to:
+#           - name: HD Standard
+#       - trash_ids:
+#           - max-10gb-bonus
+#         assign_scores_to:
+#           - name: HD Standard
+#           - name: HD Small
+#           - name: HD FuN
+#             score: 900
+# ### give smaller files a bonus 7gb
+#       - trash_ids:
+#           - max-7gb-bonus
+#         assign_scores_to:
+#           - name: HD Standard
+#       - trash_ids:
+#           - max-7gb-bonus
+#         assign_scores_to:
+#           - name: HD Standard
+#           - name: HD Small
+#           - name: HD FuN
+#             score: 1000
 ### punish bigger files 12gb
       - trash_ids:
           - above-12gb
         assign_scores_to:
           - name: HD Standard
           - name: HD Small
+          - name: HD FuN
             score: -1000
 ### reduce and "flatten" German HQ Release Groups - all good enough
       - trash_ids:
@@ -425,7 +430,7 @@ radarr:
     custom_formats:
 # Add Bluray for Remux template    
       - trash_ids:
-        # German HQ Release Groups - adjust scores to be compareable with bluray encodes
+        # German HQ Release Groups (remux) - adjust scores to be compareable with bluray encodes
         - 8608a2ed20c636b8a62de108e9147713 # German Remux Tier 01
         assign_scores_to:
           - name: UHD 4k
@@ -436,7 +441,7 @@ radarr:
           - name: UHD 4k
             score: 1500
       - trash_ids:
-        # HQ Release Groups
+        # HQ Release Groups (remux) - adjust scores to be compareable with bluray encodes
         - 3a3ff47579026e76d6504ebea39390de # Remux Tier 01
         - 9f98181fe5a3fbeb0cc29340da2a468a # Remux Tier 02
         - 8baaf0b3142bf4d94c42a724f034e27a # Remux Tier 03
@@ -522,33 +527,6 @@ radarr:
         assign_scores_to:
           - name: UHD 4k
             score: -35000
-
-
-### x265 - IMPORTANT: Only use on of the options below.
-#       - trash_ids:
-# #          - 839bea857ed2c0a8e084f3cbdbd65ecb # Uncomment this line to allow HDR/DV x265 HD releases
-#         assign_scores_to:
-#           - name: HD Highest
-
-#       - trash_ids:
-# #          - dc98083864ea246d05a42df0d05f81cc # Uncomment this line to block all x265 HD releases
-#         assign_scores_to:
-#           - name: HD Highest
-#             score: -35000
-
-### Generated Dynamic HDR
-#       - trash_ids:
-# #          - e6886871085226c3da1830830146846c # Uncomment this line to block Generated Dynamic HDR
-#         assign_scores_to:
-#           - name: HD Highest
-#             score: -35000
-
-### x265 allow German microsized (FuN)
-#      - trash_ids:
-#          - 03c430f326f10a27a9739b8bc83c30e4 
-#        assign_scores_to:
-#          - name: HD Highest
-#            score: 0
 
 sonarr:
   hd-bluray-web-ger:
