@@ -1,0 +1,22 @@
+# /etc/systemd/system/uptime-kuma.service
+[Unit]
+Description=Uptime Kuma Monitoring
+After=network.target
+
+[Service]
+Type=simple
+User=uptime-kuma
+WorkingDirectory=/opt/uptime-kuma
+ExecStart=/usr/bin/node server/server.js
+Restart=always
+Environment=NODE_ENV=production
+# Optional, nur wenn du den Port ändern willst:
+# Environment=PORT=3001
+
+# Logging (optional)
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=uptime-kuma
+
+[Install]
+WantedBy=multi-user.target
