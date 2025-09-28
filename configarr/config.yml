@@ -170,6 +170,81 @@ customFormatDefinitions:
       fields:
         min: 1800
         max: 1990
+
+  - trash_id: x265-hd-hq
+    name: x265 HQ
+    trash_scores:
+      default: 200
+    trash_description: "x265 HD HQ Releasegroups"
+    includeCustomFormatWhenRenaming: false
+    specifications:
+    - name: x265/HEVC
+      implementation: ReleaseTitleSpecification
+      negate: false
+      required: true
+      fields:
+        value: "[xh][ ._-]?265|\\bHEVC(\\b|\\d)"
+    - name: 1080p
+      implementation: ResolutionSpecification
+      negate: false
+      required: true
+      fields:
+        value: 1080
+    - name: Not 2160p
+      implementation: ResolutionSpecification
+      negate: true
+      required: true
+      fields:
+        value: 2160
+    - name: ZeroTwo
+      implementation: ReleaseGroupSpecification
+      negate: false
+      required: false
+      fields:
+         "value": "\\b(ZeroTwo|BUTTERCUP|HARTZ02|XiSS|DOGPACK404|PRiNCESSDiANA|DiVA|WAREZCX|BiTCHNUGGET)\\b"
+    - name: DMPD
+      implementation: ReleaseGroupSpecification
+      negate: false
+      required: false
+      fields:
+        value: DMPD
+    - name: VECTOR
+      implementation: ReleaseGroupSpecification
+      negate: false
+      required: false
+      fields:
+        value: VECTOR
+    - name: D02KU
+      implementation: ReleaseGroupSpecification
+      negate: false
+      required: false
+      fields:
+        value: D02KU
+    - name: 4SF
+      implementation: ReleaseGroupSpecification
+      negate: false
+      required: false
+      fields:
+        value: 4SF
+    - name: TSCC
+      implementation: ReleaseGroupSpecification
+      negate: false
+      required: false
+      fields:
+        value: TSCC
+    - name: SiXTYNiNE
+      implementation: ReleaseGroupSpecification
+      negate: false
+      required: false
+      fields:
+        value: SiXTYNiNE
+    - name: UnFIrED
+      implementation: ReleaseGroupSpecification
+      negate: false
+      required: false
+      fields:
+        value: UnFIrED
+
 ### <<< End new custom formats >>>
 
 radarr:
@@ -274,16 +349,28 @@ radarr:
           - name: HD Small
           - name: HD FuN
 
-### Prefer good x265 releases e.g. VECTOR 
+### Prefer x265 releases
       - trash_ids:
-         - dc98083864ea246d05a42df0d05f81cc # Prefer good x265 releases e.g. VECTOR
+         - dc98083864ea246d05a42df0d05f81cc
         assign_scores_to:
           - name: HD Standard
             score: 300
           - name: HD Small
-            score: 1650
+            score: 1600
           - name: HD FuN
             score: 2000
+
+### Prefer good x265 groups releases
+      - trash_ids:
+         - x265-hd-hq
+        assign_scores_to:
+          - name: HD Standard
+            score: 100
+          - name: HD Small
+            score: 200
+          - name: HD FuN
+            score: 100
+            
 # ### reduce 720p score
 #       - trash_ids:
 #           - b2be17d608fc88818940cd1833b0b24c
@@ -293,19 +380,19 @@ radarr:
 #           - name: HD FuN
 #             score: -1105
 ### reduce old movie score
-      - trash_ids:
-         - max8gb-for-older-movies-1990
-        assign_scores_to:
-          - name: HD Standard
-          - name: HD Small
-          - name: HD FuN
+      # - trash_ids:
+      #    - max8gb-for-older-movies-1990
+      #   assign_scores_to:
+      #     - name: HD Standard
+      #     - name: HD Small
+      #     - name: HD FuN
 ### allow / prefer FuN
       - trash_ids:
           - custom-allow-fun-microsized
         assign_scores_to:
           - name: HD Standard
           - name: HD Small
-            score: 35000
+            score: 34950
           - name: HD FuN
             score: 37000
 # ### give smaller files a bonus 10gb
@@ -333,13 +420,13 @@ radarr:
 #           - name: HD FuN
 #             score: 1000
 ### punish bigger files 12gb
-      - trash_ids:
-          - above-12gb
-        assign_scores_to:
-          - name: HD Standard
-          - name: HD Small
-          - name: HD FuN
-            score: -1000
+      # - trash_ids:
+      #     - above-12gb
+      #   assign_scores_to:
+      #     - name: HD Standard
+      #     - name: HD Small
+      #     - name: HD FuN
+      #       score: -1000
 ### reduce and "flatten" German HQ Release Groups - all good enough
       - trash_ids:
           - 54795711b78ea87e56127928c423689b # German Bluray Tier 01
@@ -506,8 +593,7 @@ radarr:
 # Comment out the next line if you and all of your users' setups are fully DV compatible
           - 923b6abef9b17f937fab56cfcf89e1f1 # DV (WEBDL)
 # HDR10+ Boost - Uncomment the next two lines if any of your devices DO support HDR10+
-          - b17886cb4158d9fea189859409975758 # HDR10Plus Boost
-          - 55a5b50cb416dea5a50c4955896217ab # DV HDR10+ Boost
+          - caa37d0df9c348912df1fb1d88f9273a # DV HDR10+ Boost
         assign_scores_to:
           - name: UHD 4k
 
@@ -566,7 +652,7 @@ sonarr:
 #          - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
 #          - 06d66ab109d4d2eddb2794d21526d140 # Retags
           - 1b3994c551cbb92a2c781af061f4ab44 # Scene
-          - 390455c22a9cac81a738f6cbad705c3c # no x266 except remux
+          - 041d90b435ebd773271cea047a457a6a # no x266 except remux
         assign_scores_to:
           - name: HD Highest
           - name: HD Standard
